@@ -75,7 +75,7 @@ when 1
 
   json.sub!(/DICE/, "1d20" + sign + ab.abs.to_s)
 
-  final.sub!(/OUTPUT/, "1d20" + sign + ab.abs.to_s)
+  final.sub!(/OUTPUT/, sign + ab.abs.to_s)
        .sub!(/JSON/, json)
 when 3
   puts "What is the healing amount? (Use the format NdN+/-N, where N is a natural number)"
