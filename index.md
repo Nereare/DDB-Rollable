@@ -1,37 +1,21 @@
-## Welcome to GitHub Pages
+# DDB Rollable Generator
 
-You can use the [editor on GitHub](https://github.com/Nereare/DDB-Rollable/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+With this project you can generate "rollable" JSON data to popullate your
+*D&D Beyond* homebrew.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+## Requirements
 
-### Markdown
+- [Ruby 2.5+](https://www.ruby-lang.org/); and
+- [Bundler 2.2+](https://bundler.io/).
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+## Installation
 
-```markdown
-Syntax highlighted code block
+1. Download the current version to your PC;
+2. Extract the compressed file into a folder of your choosing (henceforth `/your/instance`);
+3. Run `bundle install` in the `/your/instance` folder;
+4. Wait for all dependencies to be successfully installed; then
+5. Run `bundle exec ruby /your/instance/main.rb`.
 
-# Header 1
-## Header 2
-### Header 3
+## Attribution
 
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/Nereare/DDB-Rollable/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+Based on [this tutorial](https://www.dndbeyond.com/forums/dungeons-dragons-discussion/homebrew-house-rules/106856-adding-rollable-tags-to-your-homebrew-monsters-for?comment=1) by [Stormknight](https://www.dndbeyond.com/members/Stormknight).
