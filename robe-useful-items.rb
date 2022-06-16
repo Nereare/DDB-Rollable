@@ -36,6 +36,11 @@ def spell
   return spells[ rand(0..(spells.length-1)) ]
 end
 
+def gem
+  gems = ["Amber", "Amethyst", "Chrysoberyl", "Coral", "Garnet", "Jade", "Jet", "Pearl", "Spinel", "Tourmaline"]
+  return gems[ rand(0..(gems.length-1)) ]
+end
+
 count = 0
 for i in 1..4
   count += rand(1..4)
@@ -44,9 +49,21 @@ puts "# 4d4 = #{count}"
 
 for i in 1..count
   i = rand(1..100)
+  item = patch(i)
   scroll = ""
   if i.between?(76, 83)
     scroll = spell
   end
-  puts "#{i}: #{patch(i)}#{scroll}"
+  if i.between?(23, 30)
+    sack = []
+    item = []
+    for i in 1..10
+      sack.push(gem)
+    end
+    sack.tally.each do |key, value|
+      item.push( "#{key} (#{value})" )
+    end
+    item = "A pouch containing: " + item.sort.join(", ")
+  end
+  puts "#{i}: #{item}#{scroll}"
 end
