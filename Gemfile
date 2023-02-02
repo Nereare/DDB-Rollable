@@ -3,4 +3,4 @@
 source "https://rubygems.org"
 
 gem "clipboard"
-gem "ffi", :platforms => [:mswin, :mingw, :x64_mingw]
+gem "ffi", platforms: %i[mingw x64_mingw mswin mri]
