@@ -331,6 +331,16 @@ def attributes
   traits = []
   foo = ""
 
+  spellcasting = spellcasting()
+  if !spellcasting.empty?
+    traits.push(spellcasting)
+  end
+
+  # Check if continue
+  puts "Spellcasting added, continue? (Y/n)"
+  foo = gets.strip.downcase
+  puts ""
+
   # Loop to get several traits
   while foo != "n"
     # Open paragraph tag
@@ -378,6 +388,254 @@ def attributes
     Clipboard.copy(final)
     puts "Copied to clipboard!"
   end
+end
+# Sub-method - Process spellcasting
+def spellcasting
+  spellcasting = []
+
+  # Check if creature will have spellcasting
+  puts "Will the creature have spellcasting? (y/N)"
+  if gets.strip.downcase == "y"
+    puts ""
+    title = "<p><strong>"
+    # Get trait title
+    puts "What will be the spellcasting title?"
+    puts "  1. Spellcasting (default);"
+    puts "  2. Innate Spellcasting; or"
+    puts "  3. Other."
+    case gets.to_i
+    when 2
+      spell_name = "Innate Spellcasting"
+    when 3
+      puts "Enter spellcasting title:"
+      spell_name = gets.strip
+    else
+      spell_name = "Spellcasting"
+    end
+    title << spell_name + ".</strong> "
+    # Get trait intro text
+    puts "What will be the spellcasting intro text?"
+    spell_text = gets_clipboard()
+    # Check for dice rolls
+    if /[-\+]\d+/.match?(spell_text)
+      puts "Your text contains dice rolls, process them? (Y/n)"
+      if gets.strip.downcase != "n"
+        spell_text = process_atk_rolls(spell_text, spell_name)
+      end
+    end
+    title << spell_text
+    # Insert into array
+    spellcasting.push(title)
+
+    # Get spellcasting economy style
+    puts "What kind of economy will the creature use?"
+    puts "  1. Spellslots (default);"
+    puts "  2. Times per day; or"
+    puts "  3. Times per period."
+    case gets.to_i
+    when 2
+      spellcasting.concat(spells_per_day())
+    when 3
+      spellcasting.concat(spells_per_period())
+    else
+      spellcasting.concat(spells_per_slot())
+    end
+  end
+  puts ""
+
+  return spellcasting.join("<br>\n") + "</p>"
+end
+# Sub-method - Process (spell) attack rolls
+def process_atk_rolls(txt, name)
+  final = FINAL.dup
+  json = JSON.dup
+  action = ACTION.dup
+
+  final.gsub!(/OUTPUT/, "DICE")
+  action.gsub!(/ACTION_NAME/, name)
+  json.gsub!(/TYPE/, "to hit")
+  json.gsub!(/OTHER/, "," + action)
+  final.gsub!(/JSON/, json)
+
+  txt.gsub!(/([-\+]\d+)/) do |s|
+    s = s.to_i
+    sign = s < 0 ? "-" : "+"
+    s = final.gsub(/DICE/, "1d20" + sign + s.abs.to_s)
+  end
+
+  return txt
+end
+# Sub-method - Get spells by spell slot
+def spells_per_slot
+  spells = []
+  level = 0
+  foo = ""
+
+  # Get spells by each level of slot
+  while level < 10 && foo != "n"
+    text = ""
+    slots = nil
+    level_txt = ""
+
+    # Set subtitle
+    case level
+    when 0
+      text << "Cantrips "
+      level_txt = "cantrips"
+    when 1
+      text << "1st level "
+      level_txt = "1st level spells"
+    when 2
+      text << "2nd level "
+      level_txt = "2nd level spells"
+    when 3
+      text << "3rd level "
+      level_txt = "3rd level spells"
+    else
+      text << level.to_s + "th level "
+      level_txt = level.to_s + "th level spells"
+    end
+    puts "Setting " + level_txt + "..."
+    # Get number of slots
+    if level != 0
+      puts "How many slots?"
+      slots = gets.to_i
+      puts ""
+    end
+    if slots.nil?
+      text << "(at will)"
+    else
+      text << "(" + slots.to_s + " slot" + (slots > 1 ? "s" : "") + ")"
+    end
+    text << ": "
+
+    # Get spell list for level
+    puts "What are the " + level_txt + "?"
+    text << process_spell_list()
+
+    # Add to array
+    spells.push(text)
+
+    # Check to continue
+    level += 1
+    if level < 10
+      puts "Continue to next level? (Y/n)"
+      foo = gets.strip.downcase
+    end
+  end
+
+  # Return retrieved spells
+  return spells
+end
+# Sub-method - Get spells per day
+def spells_per_day
+  spells = []
+  foo = ""
+
+  # Get spells by frequency
+  while foo != "n"
+    text = ""
+
+    # Get times per day
+    puts "How many times per day? (0 = at will)"
+    freq = gets.to_i
+    if freq == 0
+      text << "At will"
+    else
+      text << freq.to_s + "/day"
+    end
+    text << ": "
+
+    # Get spell list for frequency
+    puts "What are the spells?"
+    text << process_spell_list()
+
+    # Add to array
+    spells.push(text)
+
+    # Check to continue
+    puts "Continue to more frequencies? (Y/n)"
+    foo = gets.strip.downcase
+  end
+
+  # Return retrieved spells
+  return spells
+end
+# Sub-method - Get spells per period
+def spells_per_period
+  spells = []
+  foo = ""
+
+  # Get spells by frequency
+  while foo != "n"
+    text = ""
+
+    # Get times per day
+    puts "How many times per period? (0 = at will)"
+    freq = gets.to_i
+    if freq == 0
+      text << "At will"
+    else
+      text << freq.to_s + "/"
+    end
+    # Get period
+    if freq > 0
+      puts "What is the frequency? (per/X)"
+      puts "  1. Rest (default)"
+      puts "  2. Short Rest"
+      puts "  3. Long Rest"
+      puts "  4. Week"
+      puts "  5. Month"
+      puts "  6. Year"
+      case gets.to_i
+      when 2
+        text << "short rest"
+      when 3
+        text << "long rest"
+      when 4
+        text << "week"
+      when 5
+        text << "month"
+      when 6
+        text << "year"
+      else
+        text << "rest"
+      end
+    end
+    text << ": "
+
+    # Get spell list for frequency
+    puts "What are the spells?"
+    text << process_spell_list()
+
+    # Add to array
+    spells.push(text)
+
+    # Check to continue
+    puts "Continue to more frequencies? (Y/n)"
+    foo = gets.strip.downcase
+  end
+
+  # Return retrieved spells
+  return spells
+end
+# Sub-method - Process spell list
+def process_spell_list
+  spell_list = gets_clipboard()
+  spell_list = spell_list.split(",")
+  spell_list.map! do |x|
+    spell = x.strip
+    if spell.include? "("
+      spell = spell.split("(")
+      spell[0] = "[spell]" + spell[0].strip + "[/spell]"
+      spell[1] = "(" + spell[1]
+      spell = spell.join(" ")
+    else
+      spell = "[spell]" + spell + "[/spell]"
+    end
+    x = spell
+  end
+  return spell_list.join(", ")
 end
 
 # Option #3 - Legendary Actions
