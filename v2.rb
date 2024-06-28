@@ -318,7 +318,10 @@ def process_dmg_rolls(txt, name)
   json.gsub!(/TYPE/, "damage")
   json.gsub!(/OTHER/, "," + action)
   final.gsub!(/JSON/, json)
-  txt.gsub!(/(\d+d\d+( ?[-\+] ?\d+)?)/) {|s| s = final.gsub(/DICE/, s.downcase.gsub!(/\s/, "")) }
+
+  txt.gsub!(/(\d+d\d+( ?[-\+] ?\d+)?)/) do |s|
+    s = final.gsub(/DICE/, s.downcase.gsub(/\s/, ""))
+  end
 
   return txt
 end
