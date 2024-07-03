@@ -333,13 +333,17 @@ def attributes
 
   spellcasting = spellcasting()
   if !spellcasting.empty?
+    # Add spellcasting trait
     traits.push(spellcasting)
-  end
 
-  # Check if continue
-  puts "Spellcasting added, continue? (Y/n)"
-  foo = gets.strip.downcase
-  puts ""
+    # Check if continue
+    puts "Spellcasting added, continue? (Y/n)"
+    foo = gets.strip.downcase
+    puts ""
+  else
+    puts "Spellcasting skiped, first trait..."
+    puts ""
+  end
 
   # Loop to get several traits
   while foo != "n"
@@ -440,10 +444,13 @@ def spellcasting
     else
       spellcasting.concat(spells_per_slot())
     end
+
+    # Close paragraph
+    spellcasting.push("</p>")
   end
   puts ""
 
-  return spellcasting.join("<br>\n") + "</p>"
+  return spellcasting.join("<br>\n")
 end
 # Sub-method - Process (spell) attack rolls
 def process_atk_rolls(txt, name)
