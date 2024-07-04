@@ -41,29 +41,31 @@ def gem
   return gems[ rand(0..(gems.length-1)) ]
 end
 
-count = 0
-for i in 1..4
-  count += rand(1..4)
-end
-puts "# 4d4 = #{count}"
+def robe_useful_items
+  count = 0
+  for i in 1..4
+    count += rand(1..4)
+  end
+  puts "# 4d4 = #{count}"
 
-for i in 1..count
-  i = rand(1..100)
-  item = patch(i)
-  scroll = ""
-  if i.between?(76, 83)
-    scroll = spell
-  end
-  if i.between?(23, 30)
-    sack = []
-    item = []
-    for i in 1..10
-      sack.push(gem)
+  for i in 1..count
+    i = rand(1..100)
+    item = patch(i)
+    scroll = ""
+    if i.between?(76, 83)
+      scroll = spell
     end
-    sack.tally.each do |key, value|
-      item.push( "#{key} (#{value})" )
+    if i.between?(23, 30)
+      sack = []
+      item = []
+      for i in 1..10
+        sack.push(gem)
+      end
+      sack.tally.each do |key, value|
+        item.push( "#{key} (#{value})" )
+      end
+      item = "A pouch containing: " + item.sort.join(", ")
     end
-    item = "A pouch containing: " + item.sort.join(", ")
+    puts "#{i}: #{item}#{scroll}"
   end
-  puts "#{i}: #{item}#{scroll}"
 end

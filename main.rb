@@ -11,8 +11,10 @@ puts "#######################################"
 puts "Select generator:"
 puts "1. Attacks (default);"
 puts "2. Traits;"
-puts "3. Legendary actions; or"
-puts "4. Classic options."
+puts "3. Legendary actions;"
+puts "4. Robe of Useful Items (contents generator);"
+puts "5. Random Damage Generator; or"
+puts "6. Classic options."
 puts ""
 
 option = gets.to_i
@@ -24,6 +26,10 @@ when 2
 when 3
   legendary_actions()
 when 4
+  robe_useful_items()
+when 5
+  rnd_damage()
+when 6
   classic_ddb()
 else
   attacks()
