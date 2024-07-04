@@ -42,13 +42,18 @@ def gem
 end
 
 def robe_useful_items
+  puts "#######################################"
+  puts "#    Robe of Useful Items Generator   #"
+  puts "#######################################"
+  puts ""
+
   count = 0
   for i in 1..4
     count += rand(1..4)
   end
-  puts "# 4d4 = #{count}"
+  puts "# The robe contains #{count} items:"
 
-  for i in 1..count
+  for k in 1..count
     i = rand(1..100)
     item = patch(i)
     scroll = ""
@@ -66,6 +71,6 @@ def robe_useful_items
       end
       item = "A pouch containing: " + item.sort.join(", ")
     end
-    puts "#{i}: #{item}#{scroll}"
+    puts "#{k}: #{item}#{scroll}"
   end
 end

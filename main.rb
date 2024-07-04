@@ -1,5 +1,7 @@
 require "Clipboard"
 require "humanize"
+require_relative "rand-dmg.rb"
+require_relative "robe-useful-items.rb"
 require_relative "classic.rb"
 require_relative "v2.rb"
 
