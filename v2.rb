@@ -162,8 +162,15 @@ def get_attack
     attack << "<strong>" + atk_name + ".</strong> "
 
     # Get melee Vs. ranged
-    puts "Attack is melee (1, default) or ranged (2)?"
-    atk_range = gets.to_i == 2 ? "Ranged" : "Melee"
+    puts "Attack is melee (1, default), ranged (2), or either (3)?"
+    case gets.to_i
+    when 2
+      atk_range = "Ranged"
+    when 3
+      atk_range = "Melee or Ranged"
+    else
+      atk_range = "Melee"
+    end
     # Get weapon Vs. spell
     puts "Attack if physical (1, default) or magic (2)?"
     atk_type = gets.to_i == 2 ? "Spell" : "Weapon"
@@ -182,13 +189,35 @@ def get_attack
       puts "What's the reach (ft.) of the attack?"
       atk_reach = gets.to_i
       attack << "reach " + atk_reach.to_s + " ft."
-    else
-      atk_range = []
+    elsif atk_range == "Ranged"
+      atk_range = ""
       puts "What's the short range (ft.) of the attack?"
-      atk_range.push(gets.to_i)
+      atk_range << "range " + gets.to_i.to_s
       puts "And the long range (ft.)?"
-      atk_range.push(gets.to_i)
-      attack << "range " + atk_range[0].to_s + "/" + atk_range[1].to_s + " ft."
+      long = gets.to_i
+      if long == 0
+        atk_range << " ft."
+      else
+        atk_range << "/" + long.to_i.to_s + " ft."
+      end
+      attack << atk_range
+    else
+      # Reach half
+      puts "What's the reach (ft.) of the attack?"
+      atk_reach = gets.to_i
+      attack << "reach " + atk_reach.to_s + " ft. or "
+      # Range half
+      atk_range = ""
+      puts "What's the short range (ft.) of the attack?"
+      atk_range << "range " + gets.to_i.to_s
+      puts "And the long range (ft.)?"
+      long = gets.to_i
+      if long == 0
+        atk_range << " ft."
+      else
+        atk_range << "/" + long.to_i.to_s + " ft."
+      end
+      attack << atk_range
     end
     attack << ", "
 
@@ -228,6 +257,22 @@ def get_attack
       index2 = gets.to_i
       atk2_dmg_type = DAMAGE_TYPES[index2].downcase
       attack << get_mean_damage(atk2_dmg).to_s + " (" + get_damage_rollable(atk2_dmg, atk2_dmg_type, atk_name) + ") " + atk2_dmg_type + " damage"
+    end
+
+    # Check if extra text
+    puts "Is there any extra text? (y/N)"
+    if gets.strip.downcase == "y"
+      extra_text = gets_clipboard()
+      # Check for dice rolls
+      if /\d+d\d+([-\+]\d+)?/.match?(extra_text)
+        puts "Your text contains dice rolls, process them? (Y/n)"
+        if gets.strip.downcase != "n"
+          extra_text = process_dmg_rolls(extra_text, atk_name)
+        end
+      end
+      # Remove extra final dot
+      extra_text.gsub!(/\.$/, "")
+      attack << extra_text
     end
 
     # Close paragraph
