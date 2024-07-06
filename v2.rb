@@ -34,7 +34,7 @@ def attacks
   puts "Does the creature have the \"Multiattack\" attack? (y/N)"
   if gets.strip.downcase == "y"
     # Open paragraph and include multiattack name
-    attack = "<p><strong>Multiattack.</strong>. "
+    attack = "<p><strong>Multiattack.</strong> "
     # Get multiattack text
     puts "Text for the multiattack:"
     attack << gets_clipboard()
